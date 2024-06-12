@@ -4,7 +4,7 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 let userSelectedDate = null;
-let timerInterval = null;
+let countdownInterval = null;
 
 const refs = {
   startButton: document.querySelector('button[data-start]'),
@@ -14,8 +14,6 @@ const refs = {
   minutes: document.querySelector('[data-minutes]'),
   seconds: document.querySelector('[data-seconds]'),
 };
-
-let countdownInterval = null;
 
 flatpickr('#datetime-picker', {
   enableTime: true,
@@ -30,25 +28,25 @@ flatpickr('#datetime-picker', {
 function timer() {
   refs.startButton.setAttribute('disabled', '');
   refs.datetimePicker.setAttribute('disabled', '');
-  const nowDate = new Date();
 
-  let intervalId;
-  let timerInterval = userSelectedDate - nowDate;
+  countdownInterval = setInterval(() => {
+    const nowDate = new Date();
+    const timerInterval = userSelectedDate - nowDate;
 
-  intervalId = setInterval(() => {
-    timerWriter(convertMs(timerInterval));
-    timerInterval -= 1000;
     if (timerInterval <= 0) {
-      clearInterval(intervalId);
+      clearInterval(countdownInterval);
+      timerWriter(convertMs(0));
       stop();
+      return;
     }
-    // console.log(timerInterval);
+
+    timerWriter(convertMs(timerInterval));
   }, 1000);
 }
 
 function userSet(userData) {
   const nowDate = new Date();
-  if (nowDate > userData) {
+  if (nowDate >= userData) {
     // console.log('Please choose a date in the future');
     iziToast.error({
       message: 'Please choose a date in the future',

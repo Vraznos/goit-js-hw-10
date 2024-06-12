@@ -3,8 +3,8 @@ import iziToast from 'izitoast';
 // Додатковий імпорт стилів
 import 'izitoast/dist/css/iziToast.min.css';
 
-const input = document.querySelector('.form');
-input.addEventListener('submit', promises);
+const form = document.querySelector('.form');
+form.addEventListener('submit', promises);
 
 function promises(e) {
   e.preventDefault();
@@ -50,5 +50,5 @@ function promises(e) {
       });
     });
 
-  console.log(promise);
+  form.reset();
 }
